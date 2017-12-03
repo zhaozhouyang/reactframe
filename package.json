@@ -42,6 +42,7 @@
   },
   "dependencies": {
     "antd": "^2.13.11",
+    "immutability-helper": "^2.5.1",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "react-redux": "^5.0.6",
