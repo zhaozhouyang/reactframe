@@ -1,24 +1,40 @@
+import {api} from '~/src/api'
+import update from 'immutability-helper'
+
 const initialState = {
-  pending: true,
-  logged: false
+  moduleList: []
 }
 
-const global = (state = initialState, action) => {
+const GET_MODULES = 'modules/get'
 
-  if (action.type === 'GET_LOGGED_USER') {
-    return Object.assign({}, state, {
-      pending: false
+export const getModules = () => {
+  return (dispatch, getState) => {
+    api('api/modules').then(moduleList => {
+      dispatch({
+        type: GET_MODULES,
+        payload: moduleList
+      })
     })
   }
-
-  if (action.type === 'SET_LOGGED_USER') {
-    return Object.assign({}, state, {
-      pending: false,
-      logged: action.logged
-    })
-  }
-
-  return state
 }
 
-export default global
+export const actions = {
+  getModules
+}
+
+const ACTION_HANDLERS = {
+  [GET_MODULES] : (state, action) => {
+    return update(state, {
+      moduleList: {
+        $set: action.payload
+      }
+    })
+  }
+}
+
+const modules = (state = initialState, action) => {
+  const handler = ACTION_HANDLERS[action.type]
+  return handler ? handler(state, action) : state
+}
+
+export default modules
